@@ -13,7 +13,6 @@ type DB struct {
 }
 
 var Database = &DB{
-	users: &tools.SLL[*models.User]{},
+	users:  &tools.SLL[*models.User]{},
 	groups: &tools.SLL[*models.Group]{},
 }
-
