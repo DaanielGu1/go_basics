@@ -5,28 +5,48 @@ import (
 	"Treino-em-go/tools"
 )
 
-func GetUserByID(db *DB, id int) *models.User {
+func GetUserById(db *DB, id int) *models.User{
+	current := db.users.GetRear()
+	for range db.users.GetLenght() {
+		if current.GetData().ID == id{
+			return current.GetData()
+		}
+	}
+	return nil
 }
 
 func GetUserByName(db *DB, name string) *models.User {
-	for _, user := range db.users {
-		if user.Name == name {
-			return &user
+	current := db.users.GetRear()
+	for range db.users.GetLenght() {
+		if current.GetData().Name == name{
+			return current.GetData()
 		}
 	}
-
 	return nil
 }
 
 func CreateUserFromTerminal(db *DB, name string, password string, groupsStr ...string) bool {
-	if !GroupExists(db, groupsStr) {
+	if !GroupsExists(db, groupsStr) {
 		return false
 	}
 	groups := ListGroupsByName(db, groupsStr)
-	id := db.users.Lenght()
+	id := db.users.GetLenght()
+	if groups == nil {
+		groups = []models.Group{}
+	}
 
-	user := models.NewUser(id+1, name, groups, password)
+	user := models.CreateNewUser(id+1, name, password, groups)
 	db.users.Add(user)
 
 	return true
+}
+
+func (db *DB) RemoveUser(id int) *models.User {
+	user := db.users.Remove(id)
+	
+	return user
+}
+
+func (db *DB)FindUser(searcher tools.ISearcher[*models.User]) {
+	db.users.Find(searcher)
 }

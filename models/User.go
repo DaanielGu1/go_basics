@@ -7,7 +7,7 @@ type User struct {
 	Groups []Group
 }
 
-func NewUser(id int, name string, password string, groups []Group) *User {
+func CreateNewUser(id int, name string, password string, groups []Group) *User {
 	/*
 		Essa função vai definir a estrutura que será usada na criação de usuário
 		na função "CreateUser" do banco de dados.

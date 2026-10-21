@@ -1,3 +1,5 @@
+// Ok
+
 package tools
 
 import "errors"
@@ -6,6 +8,22 @@ type SLL[T any] struct {
 	lenght int
 	rear   *node[T]
 	tail   *node[T]
+}
+
+func(list *SLL[T]) GetRear() *node[T] {
+	return list.rear
+}
+
+func (sll *SLL[T]) SetRear(node *node[T]) {
+	sll.rear = node
+}
+
+func(list *SLL[T]) GetTail() *node[T] {
+	return list.tail
+}
+
+func (sll *SLL[T]) SetTail(node *node[T]) {
+	sll.tail = node
 }
 
 func NewList[T any]() *SLL[T] {
@@ -26,61 +44,95 @@ func (list *SLL[T]) Add(data T) {
 	list.lenght++
 }
 
-func (list *SLL[T]) Lenght() int {
+func (list *SLL[T]) GetLenght() int {
 	return list.lenght
 }
 
-func (list *SLL[T]) Remove(index int) (T, bool) {
-	lastIndex := list.lenght - 1
+func (sll *SLL[T]) SetLenght(amount int) {
+	sll.lenght = amount
+}
 
-	if index > lastIndex || index < 0 || list.rear == nil {
-		panic(errors.New("Index error!"))
+func (sll *SLL[T]) Remove(index int) T {
+	if sll.GetLenght() <= 0 {
+		panic(errors.New("Index out of range"))
+	}
+
+	if index < 0 {
+		index = index + sll.GetLenght()
 	}
 
 	if index == 0 {
-		deleted := list.rear.data
-		list.lenght--
-
-		if list.rear == list.tail {
-			list.rear = nil
-			list.tail = nil
-			return deleted, true
-		}
-
-		list.rear = list.rear.next
-		return deleted, true
+		return sll.removeFirst()
 	}
-
-	previousNode := list.rear
-
-	for i := 1; i < index-1; i++ {
-		previousNode = previousNode.next
+	if index == sll.GetLenght() {
+		return sll.removeLast()
 	}
-
-	n := previousNode.next
-	deleted := previousNode.next.data
-
-	previousNode.next = n.next
-	list.lenght--
-
-	return deleted, true
+	return sll.removeMiddle(index)
 }
 
-/* 
-func (list *SLL[T]) Find(data any) T {
-	previousNode := list.rear
-	lastIndex := list.lenght - 1
+func (sll *SLL[T]) removeMiddle(index int) T {
+	node := sll.GetRear()
 
-	for i := 0; i < lastIndex; i++ {
-		listData := previousNode.data
-		previousNode = previousNode.next
+	for range index - 1 {
+		node = node.GetNext()
+	}
 
-		if data == listData {
-			return i
+	data := node.GetNext().GetData()
 
+	node.SetNext(node.GetNext().GetNext())
+
+	sll.SetLenght(sll.GetLenght()-1)
+
+	return data
+}
+
+func (sll *SLL[T]) removeLast() T {
+	node := sll.GetRear()
+	data := sll.GetTail().GetData()
+
+	for range sll.lenght - 1 {
+		node = node.GetNext()
+	}
+
+	node.SetNext(nil)
+	sll.SetTail(node)
+
+	sll.SetLenght(sll.GetLenght()-1)
+
+	return data
+}
+
+func (sll *SLL[T]) removeFirst() T {
+	number := sll.rear.GetData()
+	if sll.GetLenght() == 1 {
+		sll.SetRear(nil)
+		sll.SetTail(nil)
+	} else {
+		sll.rear = sll.rear.GetNext()
+	}
+	sll.SetLenght(sll.GetLenght()-1)
+	return number
+}
+
+func (sll *SLL[T]) Find(searcher ISearcher[T]) {
+	var currentNode = sll.GetRear()
+	for index := range sll.GetLenght() {
+		searcher.Search(currentNode.GetData(), index)
+		if searcher.EarlyStop() {
+			return
 		}
+		currentNode = currentNode.GetNext()
+	}
+}
+
+func (sll *SLL[T]) SimpleFind(searcher ISimpleSearcher[T]) int {
+	var currentNode = sll.GetRear()
+	for index := range sll.GetLenght() {
+		if searcher.Check(currentNode.GetData()) {
+			return index
+		}
+		currentNode = currentNode.GetNext()
 	}
 
 	return -1
 }
-*/
