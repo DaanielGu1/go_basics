@@ -5,30 +5,32 @@ import (
 	"Treino-em-go/tools"
 )
 
-func GetUserById(db *DB, id int) *models.User {
+func GetUserById(db *DB, id int) *models.User { // OK
 	current := db.users.GetRear()
 	for range db.users.GetLenght() {
 		if current.GetData().ID == id {
 			return current.GetData()
 		}
+
+		current.GetNext()
 	}
 	return nil
 }
 
-func GetUserByName(db *DB, name string) *models.User {
+func GetUserByName(db *DB, name string) *models.User { // OK
 	current := db.users.GetRear()
 
 	for range db.users.GetLenght() {
 		if current.GetData().Name == name {
 			return current.GetData()
 		}
-	
+
 		current = current.GetNext()
 	}
 	return nil
 }
 
-func CreateUserFromTerminal(db *DB, name string, password string, groupsStr ...string) bool {
+func CreateUserFromTerminal(db *DB, name string, password string, groupsStr ...string) bool { // OK
 	if !GroupsExists(db, groupsStr) {
 		return false
 	}
@@ -38,14 +40,14 @@ func CreateUserFromTerminal(db *DB, name string, password string, groupsStr ...s
 		groups = []models.Group{}
 	}
 
-	user := models.CreateNewUser(id+1, name, password, groups)
+	user := models.CreateNewUser(id+1, name, groups, password)
 	db.users.Add(user)
 
 	return true
 }
 
-func (db *DB) RemoveUser(id int) *models.User {
-	user := db.users.Remove(id)
+func (db *DB) RemoveUser(index int) *models.User { // OK
+	user := db.users.Remove(index)
 
 	return user
 }

@@ -7,54 +7,42 @@ type User struct {
 	Groups []Group
 }
 
-func CreateNewUser(id int, name string, password string, groups []Group) *User {
-	/*
-		Essa função vai definir a estrutura que será usada na criação de usuário
-		na função "CreateUser" do banco de dados.
-	*/
-
-	return &User{ID: id, Name: name, psw: password, Groups: groups}
+func CreateNewUser(id int, name string, groups []Group, password string) *User {
+	return &User{ID: id, Name: name, Groups: groups, psw: password}
 }
 
 func (user *User) GetGroup(groupName string) *Group {
-	/*
-		Esse método vai expor se um grupo específico está dentro da lista de grupos
-		do usuário em questão.
-	*/
-
 	for _, group := range user.Groups {
 		if group.Name == groupName {
 			return &group
 		}
 	}
-
 	return nil
 }
 
 func (user *User) InGroup(groupName string) bool {
-	/*
-		Esse método vai expor se um usuário específico está dentro de uma lista de usuários
-		de um grupo.
-	*/
-
-	for _, group := range user.Groups {
-		if group.Name == groupName {
-			return true
+	if user.Groups != nil {
+		for _, group := range user.Groups {
+			if group.Name == groupName {
+				return true
+			}
 		}
 	}
-
 	return false
 }
 
-func (user *User) AddGroup(group Group) bool {
+func (user *User) AddGroup(group *Group) bool {
 	// Esse método adiciona um novo grupo à lista de de grupos de um determinado usuário.
+
+	if group == nil {
+		return false
+	}
 
 	if user.InGroup(group.Name) {
 		return false
 	}
 
-	user.Groups = append(user.Groups, group)
-
+	user.Groups = append(user.Groups, *group)
 	return true
 }
 

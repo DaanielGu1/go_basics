@@ -3,8 +3,8 @@
 package database
 
 import (
-	"Treino-em-go/models"
 	"Treino-em-go/tools"
+	"Treino-em-go/models"
 )
 
 type DB struct {

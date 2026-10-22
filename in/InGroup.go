@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func NewGroup() error {
+func NewGroup() error { // OK
 	fmt.Println("Creating a new group...")
 	name, err := IOGetString("Type group's name: ")
 
@@ -22,7 +22,7 @@ func NewGroup() error {
 	return err
 }
 
-func PrintGroup() error {
+func PrintGroup() error { // OK
 	name, err := IOGetString("Type wanted group's name: ")
 	
 	if err != nil {
