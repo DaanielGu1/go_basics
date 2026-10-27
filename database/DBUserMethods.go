@@ -7,7 +7,7 @@ import (
 
 func GetUserById(db *DB, id int) *models.User { // OK
 	current := db.users.GetRear()
-	for range db.users.GetLenght() {
+	for range db.users.GetLength() {
 		if current.GetData().ID == id {
 			return current.GetData()
 		}
@@ -20,7 +20,7 @@ func GetUserById(db *DB, id int) *models.User { // OK
 func GetUserByName(db *DB, name string) *models.User { // OK
 	current := db.users.GetRear()
 
-	for range db.users.GetLenght() {
+	for range db.users.GetLength() {
 		if current.GetData().Name == name {
 			return current.GetData()
 		}
@@ -35,7 +35,7 @@ func CreateUserFromTerminal(db *DB, name string, password string, groupsStr ...s
 		return false
 	}
 	groups := ListGroupsByName(db, groupsStr)
-	id := db.users.GetLenght()
+	id := db.users.GetLength()
 	if groups == nil {
 		groups = []models.Group{}
 	}
