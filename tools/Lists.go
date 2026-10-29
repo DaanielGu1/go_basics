@@ -5,35 +5,35 @@ package tools
 import "errors"
 
 type SLL[T any] struct {
-	lenght int
+	length int
 	rear   *node[T]
 	tail   *node[T]
 }
 
-func(list *SLL[T]) GetRear() *node[T] {
+func (list *SLL[T]) setRear() *node[T] {
 	return list.rear
 }
 
-func (sll *SLL[T]) SetRear(node *node[T]) {
-	sll.rear = node
+func (sll *SLL[T]) getRear(data T) {
+	sll.rear.data = data
 }
 
-func(list *SLL[T]) GetTail() *node[T] {
+func (list *SLL[T]) getTail() *node[T] {
 	return list.tail
 }
 
-func (sll *SLL[T]) SetTail(node *node[T]) {
-	sll.tail = node
+func (sll *SLL[T]) setTail(data T) {
+	sll.tail.data = data
 }
 
 func NewList[T any]() *SLL[T] {
-	return &SLL[T]{lenght: 0}
+	return &SLL[T]{length: 0}
 }
 
 func (list *SLL[T]) Add(data T) {
 	n := newNode(data)
 
-	if list.lenght == 0 {
+	if list.length == 0 {
 		list.rear = n
 		list.tail = n
 	} else {
@@ -41,37 +41,37 @@ func (list *SLL[T]) Add(data T) {
 		list.tail = n
 	}
 
-	list.lenght++
+	list.length++
 }
 
-func (list *SLL[T]) GetLenght() int {
-	return list.lenght
+func (list *SLL[T]) GetLength() int {
+	return list.length
 }
 
-func (sll *SLL[T]) SetLenght(amount int) {
-	sll.lenght = amount
+func (sll *SLL[T]) SetLength(amount int) {
+	sll.length = amount
 }
 
 func (sll *SLL[T]) Remove(index int) T {
-	if sll.GetLenght() <= 0 {
+	if sll.GetLength() <= 0 {
 		panic(errors.New("Index out of range"))
 	}
 
 	if index < 0 {
-		index = index + sll.GetLenght()
+		index = index + sll.GetLength()
 	}
 
 	if index == 0 {
 		return sll.removeFirst()
 	}
-	if index == sll.GetLenght() {
+	if index == sll.GetLength() {
 		return sll.removeLast()
 	}
 	return sll.removeMiddle(index)
 }
 
 func (sll *SLL[T]) removeMiddle(index int) T {
-	node := sll.GetRear()
+	node := sll.rear
 
 	for range index - 1 {
 		node = node.GetNext()
@@ -81,42 +81,42 @@ func (sll *SLL[T]) removeMiddle(index int) T {
 
 	node.SetNext(node.GetNext().GetNext())
 
-	sll.SetLenght(sll.GetLenght()-1)
+	sll.SetLength(sll.GetLength() - 1)
 
 	return data
 }
 
 func (sll *SLL[T]) removeLast() T {
-	node := sll.GetRear()
-	data := sll.GetTail().GetData()
+	current := sll.rear
+	data := sll.tail.data
 
-	for range sll.lenght - 1 {
-		node = node.GetNext()
+	for range sll.length - 1 {
+		current = current.GetNext()
 	}
+	
+	sll.tail = current
+	current.SetNext(nil)
 
-	node.SetNext(nil)
-	sll.SetTail(node)
-
-	sll.SetLenght(sll.GetLenght()-1)
+	sll.SetLength(sll.GetLength() - 1)
 
 	return data
 }
 
 func (sll *SLL[T]) removeFirst() T {
 	number := sll.rear.GetData()
-	if sll.GetLenght() == 1 {
-		sll.SetRear(nil)
-		sll.SetTail(nil)
+	if sll.GetLength() == 1 {
+		sll.rear = nil
+		sll.tail = nil
 	} else {
 		sll.rear = sll.rear.GetNext()
 	}
-	sll.SetLenght(sll.GetLenght()-1)
+	sll.SetLength(sll.GetLength() - 1)
 	return number
 }
 
 func (sll *SLL[T]) Find(searcher ISearcher[T]) {
-	var currentNode = sll.GetRear()
-	for index := range sll.GetLenght() {
+	var currentNode = sll.rear
+	for index := range sll.GetLength() {
 		searcher.Search(currentNode.GetData(), index)
 		if searcher.EarlyStop() {
 			return
@@ -126,8 +126,8 @@ func (sll *SLL[T]) Find(searcher ISearcher[T]) {
 }
 
 func (sll *SLL[T]) SimpleFind(searcher ISimpleSearcher[T]) int {
-	var currentNode = sll.GetRear()
-	for index := range sll.GetLenght() {
+	var currentNode = sll.rear
+	for index := range sll.GetLength() {
 		if searcher.Check(currentNode.GetData()) {
 			return index
 		}
@@ -136,3 +136,27 @@ func (sll *SLL[T]) SimpleFind(searcher ISimpleSearcher[T]) int {
 
 	return -1
 }
+
+func (sll *SLL[T]) Get(index int) T {
+	if sll.GetLength() <= 0 {
+		panic(errors.New("Empty list"))
+	}
+
+	if index < 0 {
+		index = sll.GetLength() + index
+
+		if index < 0 {
+			panic(errors.New("Index out of range"))
+		} else if index > sll.GetLength() - 1 {
+			panic(errors.New("Index out of range"))
+		}
+	}
+
+	node := sll.rear
+	for range index {
+		node = node.next
+	}
+
+	return node.data
+}
+

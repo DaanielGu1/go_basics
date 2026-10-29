@@ -7,11 +7,13 @@ import (
 
 func GroupsExists(db *DB, names []string) bool {
 	var cont int
-	current := db.groups.GetRear()
-	for range db.groups.GetLenght() {
+	
+	for i := range db.groups.GetLength() {
+		current := db.groups.Get(i)
+	
 		for index := range names {
-			if (current.GetData().Name == names[index]) {
-				cont +=1
+			if current.Name == names[index] {
+				cont += 1
 			}
 		}
 	}
@@ -22,41 +24,39 @@ func GroupsExists(db *DB, names []string) bool {
 }
 
 func ListGroupsByName(db *DB, names []string) []models.Group {
-	grouplist := make([]models.Group,len(names))
-	current := db.groups.GetRear()
-	for range db.groups.GetLenght() {
-		for _,name := range names {
-			if (current.GetData().Name ==name) {
-				grouplist = append(grouplist, *current.GetData())
+	grouplist := make([]models.Group, len(names))
+	
+	for i := range db.users.GetLength() {
+		current := db.groups.Get(i)
+
+		for _, name := range names {
+			if current.Name == name {
+				grouplist = append(grouplist, *current)
 			}
-			current = current.GetNext()
 		}
 	}
 	return grouplist
 }
 
 func GetGroupByName(db *DB, name string) *models.Group {
-	current := db.groups.GetRear()
-
-	for range db.groups.GetLenght() {
-		if current.GetData().Name == name {
-			return current.GetData()
-		}
-
-		current = current.GetNext()
-	}
+	for i := range db.groups.GetLength() {
+		current := db.groups.Get(i)
 	
+		if current.Name == name {
+			return current
+		}
+	}
 	return nil
 }
 
 func CreateGroupFromTerminal(db *DB, name string) bool {
 	groupL := []string{name}
-	
+
 	if GroupsExists(db, groupL) {
 		return false
 	}
 
-	id := db.groups.GetLenght() + 1
+	id := db.groups.GetLength() + 1
 	group := models.CreateNewGroup(id, name)
 	db.groups.Add(group)
 
