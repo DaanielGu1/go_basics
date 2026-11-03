@@ -36,6 +36,19 @@ func (cmp *GroupComparable) equals(groupCmp *models.Group) bool {
 	return cmp.group == groupCmp
 }
 
+// ---- Type Int (for tests) ---- \\
+
+type IntComparable struct {
+	number int
+}
+
+func (cmp *IntComparable) equals(other int) bool {
+	return cmp.number == other
+}
+func NewIntComparable(num int) *IntComparable {
+	return &IntComparable{number: num}
+}
+
 // ---- Searcher generic implementations ---- \\
 
 // 1. First Searcher \\
@@ -50,7 +63,7 @@ func (cmp *FindFirstSearcher[T]) equals(other T) bool {
 	return cmp.obj.equals(other)
 }
 
-func NewFindSearcher[T any](comparator Comparable[T]) *FindFirstSearcher[T] {
+func NewFindFirstSearcher[T any](comparator Comparable[T]) *FindFirstSearcher[T] {
 	return &FindFirstSearcher[T]{flag: false, obj: comparator}
 }
 

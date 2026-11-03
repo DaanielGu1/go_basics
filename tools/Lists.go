@@ -10,7 +10,7 @@ type SLL[T any] struct {
 	tail   *node[T]
 }
 
-func (list *SLL[T]) setRear() *node[T] {
+/* func (list *SLL[T]) setRear() *node[T] {
 	return list.rear
 }
 
@@ -24,7 +24,7 @@ func (list *SLL[T]) getTail() *node[T] {
 
 func (sll *SLL[T]) setTail(data T) {
 	sll.tail.data = data
-}
+} */
 
 func NewList[T any]() *SLL[T] {
 	return &SLL[T]{length: 0}

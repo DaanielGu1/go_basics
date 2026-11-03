@@ -1,26 +1,22 @@
 package main
 
 import (
-	"Treino-em-go/database"
-	"Treino-em-go/in"
+	"Treino-em-go/tools"
 )
 
 func main() {
+	list := tools.NewList[int]()
 	
-		in.NewUser() // Creating a new user correctly
-		in.NewUser()
-		in.NewUser()
-	
-		/* in.PrintUser() // Printing a user from database correctly
+	list.Add(1)
+	list.Add(2)
+	list.Add(3)
+	list.Add(4)
+	list.Add(5)
+	list.Add(6)
+	list.Add(3)
 
-		in.NewGroup() // Creating a new group correctly
-		in.NewGroup()
+	// x := tools.NewFindFirstSearcher(tools.NewIntComparable(3))
 
-		in.PrintGroup() // Printing a group from database correctly */
+	// y := tools.NewFindAll(tools.NewIntComparable(3))
 
-		database.Database.RemoveUser(2) // Deleting a user from database correctly
-
-		in.PrintUser()
-		in.PrintUser()
-		
 }
