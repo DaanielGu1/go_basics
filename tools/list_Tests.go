@@ -1,6 +1,8 @@
 package tools
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestInit(t *testing.T) {
 	list := NewList[int]()
@@ -94,14 +96,64 @@ func TestAddAndRemove(t *testing.T) {
 	}
 }
 
-func TestSearcher(t *testing.T) {
-	list := NewList[string]()
+func TestFindFirst(t *testing.T) {
+	list := NewList[int]()
 
-	list.Add("")
-	list.Add("123")
-	list.Add("hello")
-	list.Add("sample")
-	list.Add("this")
-	list.Add("sample")
+	list.Add(1)
+	list.Add(2)
+	list.Add(3)
+	list.Add(4)
+	list.Add(5)
+	list.Add(6)
+
+	searcher := NewFindFirstSearcher(NewIntComparable(4))
+
+	if searcher == nil {
+		t.Errorf("NewFindFirstSearcher(); Fail creating a FirstSearcher")
+	}
+
+	list.Find(searcher)
+
+	if !searcher.Check(4) {
+		t.Errorf("Check() = %t; want %t; the method isn't able to compare correctly", true, false)
+	}
+
+	if searcher.flag != true {
+		t.Errorf("NewFindFirstSearcher(); The searcher didn't find this number: %d", 4)
+	}
+
+	if searcher.index != 3 {
+		t.Errorf("NewFindFirstSearcher(); The searcher is pointing to a wrong index: %d", searcher.index)
+	}
 }
-	
+
+func TestFindAll(t *testing.T) {
+	list := NewList[int]()
+
+	list.Add(1)
+	list.Add(2)
+	list.Add(1)
+	list.Add(2)
+	list.Add(3)
+	list.Add(4)
+
+	searcher := NewFindAll(NewIntComparable(2))
+
+	if searcher == nil {
+		t.Errorf("NewFindAll(); Fail creating a FindAll")
+	}
+
+	list.Find(searcher)
+
+	if !searcher.obj.equals(2) {
+		t.Errorf("NewFindAll(); The searcher is searching a wrong number.")
+	}
+
+	if searcher.flag != true {
+		t.Errorf("NewFindAll(); The searcher didn't find this number: %d", 2)
+	}
+
+	if searcher.index[0] != 1 || searcher.index[1] != 3 {
+		t.Errorf("NewFindAll(); The searcher is pointing to the wrong index: %d, %d", searcher.index[0], searcher.index[1])
+	}
+}

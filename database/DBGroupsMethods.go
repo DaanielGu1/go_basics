@@ -69,6 +69,6 @@ func (db *DB) RemoveGroup(id int) *models.Group {
 	return group
 }
 
-func (db *DB) Find(searcher tools.ISearcher[*models.Group]) {
+func (db *DB) FindGroup(searcher tools.ISearcher[*models.Group]) {
 	db.groups.Find(searcher)
 }

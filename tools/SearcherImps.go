@@ -78,6 +78,10 @@ func (searcher *FindFirstSearcher[T]) Check(other T) bool {
 	return searcher.obj.equals(other)
 }
 
+func (searcher *FindFirstSearcher[T]) EarlyStop() bool {
+	return searcher.flag
+}
+
 // 2. All Searchers \\
 
 type FindAllSearchers[T any] struct {
@@ -103,4 +107,8 @@ func (searcher *FindAllSearchers[T]) Search(index int, other T) {
 
 func (searcher *FindAllSearchers[T]) Check(other T) bool {
 	return searcher.obj.equals(other)
+}
+
+func (searcher *FindAllSearchers[T]) EarlyStop() bool {
+	return false
 }
