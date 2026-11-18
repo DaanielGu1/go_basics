@@ -10,22 +10,6 @@ type SLL[T any] struct {
 	tail   *node[T]
 }
 
-/* func (list *SLL[T]) setRear() *node[T] {
-	return list.rear
-}
-
-func (sll *SLL[T]) getRear(data T) {
-	sll.rear.data = data
-}
-
-func (list *SLL[T]) getTail() *node[T] {
-	return list.tail
-}
-
-func (sll *SLL[T]) setTail(data T) {
-	sll.tail.data = data
-} */
-
 func NewList[T any]() *SLL[T] {
 	return &SLL[T]{length: 0}
 }
@@ -54,64 +38,45 @@ func (sll *SLL[T]) SetLength(amount int) {
 
 func (sll *SLL[T]) Remove(index int) T {
 	if sll.GetLength() <= 0 {
-		panic(errors.New("Index out of range"))
+		panic(errors.New("Empty list"))
 	}
 
 	if index < 0 {
-		index = index + sll.GetLength()
+		index = sll.GetLength() + index
+
+		if index < 0 {
+			panic(errors.New("Index out of range"))
+		}
+	} else if index > sll.GetLength()-1 {
+		panic(errors.New("Index out of range"))
 	}
+
+	sll.SetLength(sll.GetLength() - 1)
 
 	if index == 0 {
-		return sll.removeFirst()
-	}
-	if index == sll.GetLength() {
-		return sll.removeLast()
-	}
-	return sll.removeMiddle(index)
-}
-
-func (sll *SLL[T]) removeMiddle(index int) T {
-	node := sll.rear
-
-	for range index - 1 {
-		node = node.GetNext()
-	}
-
-	data := node.GetNext().GetData()
-
-	node.SetNext(node.GetNext().GetNext())
-
-	sll.SetLength(sll.GetLength() - 1)
-
-	return data
-}
-
-func (sll *SLL[T]) removeLast() T {
-	current := sll.rear
-	data := sll.tail.data
-
-	for range sll.length - 1 {
-		current = current.GetNext()
-	}
-	
-	sll.tail = current
-	current.SetNext(nil)
-
-	sll.SetLength(sll.GetLength() - 1)
-
-	return data
-}
-
-func (sll *SLL[T]) removeFirst() T {
-	number := sll.rear.GetData()
-	if sll.GetLength() == 1 {
-		sll.rear = nil
-		sll.tail = nil
-	} else {
+		data := sll.rear.GetData()
 		sll.rear = sll.rear.GetNext()
+
+		if sll.length == 0 {
+			sll.tail = nil
+		}
+
+		return data
 	}
-	sll.SetLength(sll.GetLength() - 1)
-	return number
+
+	node := sll.rear.Walk(index - 1)
+	data, ok := node.WalkGetData(1)
+	if !ok {
+		panic(errors.New("Index out of range"))
+	}
+	node.WalkSetNext(1)
+
+	if index == sll.GetLength() {
+		//VALOR DA LISTA ANTERIORMENTE FOI REDUZIDO EM 1!
+		sll.tail = node
+	}
+
+	return data
 }
 
 func (sll *SLL[T]) Find(searcher ISearcher[T]) {
@@ -159,4 +124,3 @@ func (sll *SLL[T]) Get(index int) T {
 
 	return node.data
 }
-

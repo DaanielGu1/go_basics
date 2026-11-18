@@ -49,6 +49,21 @@ func NewIntComparable(num int) *IntComparable {
 	return &IntComparable{number: num}
 }
 
+// ---- Type String (for tests) ---- \\
+
+type StringComparable struct {
+	str string
+}
+
+func (cmp *StringComparable) equals(other string) bool {
+	return cmp.str == other
+}
+func NewStringComparable(stringCmp string) *StringComparable {
+	return &StringComparable{
+		str: stringCmp,
+	}
+}
+
 // ---- Searcher generic implementations ---- \\
 
 // 1. First Searcher \\
@@ -67,7 +82,7 @@ func NewFindFirstSearcher[T any](comparator Comparable[T]) *FindFirstSearcher[T]
 	return &FindFirstSearcher[T]{flag: false, obj: comparator}
 }
 
-func (searcher *FindFirstSearcher[T]) Search(index int, other T) {
+func (searcher *FindFirstSearcher[T]) Search(other T, index int) {
 	if searcher.obj.equals(other) {
 		searcher.flag = true
 		searcher.index = index
@@ -80,6 +95,10 @@ func (searcher *FindFirstSearcher[T]) Check(other T) bool {
 
 func (searcher *FindFirstSearcher[T]) EarlyStop() bool {
 	return searcher.flag
+}
+
+func (searcher *FindFirstSearcher[T]) GetIndex() int {
+	return searcher.index
 }
 
 // 2. All Searchers \\
@@ -98,7 +117,7 @@ func NewFindAll[T any](comparator Comparable[T]) *FindAllSearchers[T] {
 	}
 }
 
-func (searcher *FindAllSearchers[T]) Search(index int, other T) {
+func (searcher *FindAllSearchers[T]) Search(other T, index int) {
 	if searcher.obj.equals(other) {
 		searcher.flag = true
 		searcher.index = append(searcher.index, index)
