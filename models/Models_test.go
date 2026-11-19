@@ -43,7 +43,7 @@ func TestUsers(t *testing.T)  {
 		t.Errorf("User.AddGroup() = false; want true; function isn't adding a group that isn't in the user list of groups")
 	}
 
-	/* returnedGroup = user1.RemoveGroupFromUser(group) 
+	returnedGroup = user1.RemoveGroupFromUser(group) 
 	if returnedGroup == nil {
 		t.Errorf("User.RemoveGroupFromUser() = nil; want %p; function should return the removed group", group)
 	}
@@ -51,5 +51,5 @@ func TestUsers(t *testing.T)  {
 	returnedGroup = user1.RemoveGroupFromUser(CreateNewGroup(3,"groupName"))
 	if returnedGroup != nil {
 		t.Errorf("User.RemoveGroupFromUser() = %p; want nil; function shouldn't return a ptr when the group isn't in the user's groups", returnedGroup)
-	} */
+	}
 }

@@ -160,6 +160,8 @@ func TestGet(t *testing.T) {
 	if obj != 5 {
 		t.Errorf("SLL.Get() = %d; want %d; the method got issues while trying to get the expected element", obj, 2)
 	}
+
+
 }
 
 func TestAllSearcher(t *testing.T) {
@@ -230,6 +232,11 @@ func TestFirstSearcher(t *testing.T) {
 		t.Errorf("firstSearcher.index = %d; want %d; the method isn't capable of comparing correctly", firstSearcher.index, 3)
 	}
 
+	testGet := firstSearcher.GetIndex()
+
+	if testGet != 3 {
+		t.Errorf("GetIndex() = %d; want %d; the method isn't capable of comparing correctly", firstSearcher.GetIndex(), 3)
+	}
 }
 
 func TestWalk(t *testing.T) {

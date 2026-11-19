@@ -46,17 +46,12 @@ func (user *User) AddGroup(group *Group) bool {
 	return true
 }
 
-func (user *User) RemoveGroup(groupName string) *Group {
-	/*
-		Esse método serve para remover um determinado grupo da lista de grupos de um único
-		usuário.
-	*/
-
-	for i, group := range user.Groups { // Usando um for para percorrer a lista de grupos de um usuário.
-		if group.Name == groupName { // Verifica se o nome do grupo atual é igual ao do parâmetro.
-			user.Groups = append(user.Groups[:i], user.Groups[i+1:]...) // Copiar a lista até antes do grupo atual e depois do grupo atual.
-			return &group
+func (user *User) RemoveGroupFromUser(group *Group) *Group {
+	for index, userGroup := range user.Groups {
+		if userGroup == *group {
+			user.Groups = append(user.Groups[:index], user.Groups[index+1:]...)
+			return group
 		}
 	}
-	return nil // Caso ele não encontre o grupo na lista, retorna vazio.
+	return nil
 }
