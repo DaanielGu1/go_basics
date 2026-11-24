@@ -35,7 +35,7 @@ func TestGetInt(t *testing.T) {
 	}
 
 	if num != 3 {
-		t.Errorf("IOGetString() = %s; want Daniel: The function got the a wrong string.", num)
+		t.Errorf("IOGetString() = %d; want Daniel: The function got the a wrong string.", num)
 	}
 
 	if num == 0 {
