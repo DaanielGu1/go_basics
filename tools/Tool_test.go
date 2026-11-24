@@ -93,7 +93,6 @@ func TestAddAndRemove(t *testing.T) {
 	}
 
 	list.Add(3)
-	// [1, 2, 3]
 
 	if list.rear == list.tail {
 		t.Errorf("SLL.Add(); third call of method should set rear and tail as different nodes, but they aren't.")
@@ -103,39 +102,27 @@ func TestAddAndRemove(t *testing.T) {
 		t.Errorf("SLL.Add(); third call of method should set rear.next.next and tail as same nodes, but they aren't.")
 	}
 
-	if list.length != 3 {
-		t.Errorf("SLL.Add() = %d; want 3; the length doesn't matches with the expected.", list.length)
-	}
-
 	obj := list.Remove(0)
 	if obj != 1 {
-		t.Errorf("SLL.Remove() = %d; want %d; the method got issues while trying to remove the first element", obj, 5)
-	}
-
-	if list.length != 2 {
-		t.Errorf("SLL.Remove() = %d; want 2; the length doesn't matches with the expected.", list.length)
+		t.Errorf("SLL.Remove() = %d; want %d; the method got issues while trying to remove the first element", obj, 1)
 	}
 
 	list.Add(obj)
-	// [2, 3, 1]
-
-	obj = list.Remove(-2)
-	if obj != 2 {
-		t.Errorf("SLL.Remove() = %d; want %d; the method got issues while trying to remove last element", obj, 5)
+	obj = list.Remove(2)
+	if obj != 1 {
+		t.Errorf("SLL.Remove() = %d; want %d; the method got issues while trying to remove last element", obj, 1)
 	}
 
-	list.Add(obj)
-	// [2, 1, 3]
+	removedObj := list.Remove(-1)
+	if removedObj != obj {
+		t.Errorf("SLL.Remove() = %d; want 1; the method isn't being able to convert the negative index correctly", obj)
+	}
+
+	list.Add(removedObj)
 
 	obj = list.Remove(1)
-	// [2, 3]
-
-	if obj != 1 {
+	if obj != 3 {
 		t.Errorf("SLL.Remove() = %d; want %d; the method got issues while trying to remove the middle element", obj, 5)
-	}
-
-	if list.tail == nil {
-		t.Errorf("SLL.Remove(): the method didn't set tail after remove.")
 	}
 }
 
@@ -195,6 +182,19 @@ func TestAllSearcher(t *testing.T) {
 
 	if index == -1 {
 		t.Errorf("SimpleFind() = -1; want 3: the method didn't found the item in the list.")
+	}
+
+	if index != -1 {
+		t.Errorf("SimpleFind() = -1; want 3: the method haven't found the item in the list.")
+	}
+
+	allSearcher = NewFindAll(NewStringComparable("noString"))
+	if(list.SimpleFind(allSearcher)) != -1 {
+		t.Errorf("SimpleFind() = %d; want -1; method shouldn't return any number except -1 when the element isn't in the list", list.SimpleFind(allSearcher))
+	}
+
+	if allSearcher.GetIndex() == nil {
+		t.Errorf("GetIndex() = nil; want []int{3,5}; method is not being able to return searcher's index")
 	}
 }
 

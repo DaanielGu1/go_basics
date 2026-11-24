@@ -3,17 +3,18 @@ package in
 import (
 	"Treino-em-go/database"
 	"fmt"
+	"io"
 )
 
-func NewGroup() error { // OK
+func NewGroup(r io.Reader, w io.Writer) error { // OK
 	fmt.Println("Creating a new group...")
-	name, err := IOGetString("Type group's name: ")
+	name, err := IOGetString("Type group's name: ", r, w)
 
 	if err != nil {
 		return err
 	}
 
-	ok := database.CreateGroupFromTerminal(database.Database, name)
+	ok := database.CreateGroup(database.Database, name)
 
 	if !ok {
 		fmt.Println("This group already exists.")
@@ -22,8 +23,8 @@ func NewGroup() error { // OK
 	return err
 }
 
-func PrintGroup() error { // OK
-	name, err := IOGetString("Type wanted group's name: ")
+func PrintGroup(r io.Reader, w io.Writer) error { // OK
+	name, err := IOGetString("Type wanted group's name: ", r, w)
 	
 	if err != nil {
 		return err

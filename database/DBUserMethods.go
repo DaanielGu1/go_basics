@@ -27,7 +27,7 @@ func GetUserByName(db *DB, name string) *models.User { // OK
 	return nil
 }
 
-func CreateUserFromTerminal(db *DB, name string, password string, groupsStr ...string) bool { // OK
+func CreateUser(db *DB, name string, password string, groupsStr ...string) bool { // OK
 	if !GroupsExists(db, groupsStr) {
 		return false
 	}

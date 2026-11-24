@@ -3,22 +3,23 @@ package in
 import (
 	"Treino-em-go/database"
 	"fmt"
+	"io"
 )
 
-func NewUser() error{ // OK
+func NewUser(r io.Reader, w io.Writer) error{ // OK
 	fmt.Println("Creating a new user...")
-	name, err := IOGetString("Type user's name: ")
+	name, err := IOGetString("Type user's name: ", r, w)
 	
 	if err != nil {
 		return err
 	}
 
-	password, err := IOGetString("Type user's password: ")
+	password, err := IOGetString("Type user's password: ", r, w)
 	if err != nil {
 		return err
 	}
 	for true {
-		passwordCheck, err := IOGetString("Type user's password again: ")
+		passwordCheck, err := IOGetString("Type user's password again: ", r, w)
 		if err != nil {
 			return err
 		}
@@ -26,15 +27,15 @@ func NewUser() error{ // OK
 			fmt.Println("Wrong password!")
 			continue
 		} else {
-			database.CreateUserFromTerminal(database.Database, name, password)
+			database.CreateUser(database.Database, name, password)
 		}
 		return err
 	}
 	return err
 }
 
-func PrintUser() error { // OK
-	name, err := IOGetString("Type wanted user's name: ")
+func PrintUser(r io.Reader, w io.Writer) error { // OK
+	name, err := IOGetString("Type wanted user's name: ", r, w)
 	if err != nil {
 		return err
 	}

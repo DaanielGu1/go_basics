@@ -103,31 +103,35 @@ func (searcher *FindFirstSearcher[T]) GetIndex() int {
 
 // 2. All Searchers \\
 
-type FindAllSearchers[T any] struct {
+type FindAllSearcher[T any] struct {
 	flag bool
 	index []int
 	obj Comparable[T]
 }
 
-func NewFindAll[T any](comparator Comparable[T]) *FindAllSearchers[T] {
-	return &FindAllSearchers[T] {
+func NewFindAll[T any](comparator Comparable[T]) *FindAllSearcher[T] {
+	return &FindAllSearcher[T] {
 		flag: false,
 		obj: comparator,
 		index: []int{},
 	}
 }
 
-func (searcher *FindAllSearchers[T]) Search(other T, index int) {
+func (searcher *FindAllSearcher[T]) Search(other T, index int) {
 	if searcher.obj.equals(other) {
 		searcher.flag = true
 		searcher.index = append(searcher.index, index)
 	}
 }
 
-func (searcher *FindAllSearchers[T]) Check(other T) bool {
+func (searcher *FindAllSearcher[T]) Check(other T) bool {
 	return searcher.obj.equals(other)
 }
 
-func (searcher *FindAllSearchers[T]) EarlyStop() bool {
+func (searcher *FindAllSearcher[T]) EarlyStop() bool {
 	return false
+}
+
+func (searcher *FindAllSearcher[T]) GetIndex() []int {
+	return searcher.index
 }

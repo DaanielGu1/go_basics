@@ -49,7 +49,7 @@ func GetGroupByName(db *DB, name string) *models.Group {
 	return nil
 }
 
-func CreateGroupFromTerminal(db *DB, name string) bool {
+func CreateGroup(db *DB, name string) bool {
 	groupL := []string{name}
 
 	if GroupsExists(db, groupL) {
