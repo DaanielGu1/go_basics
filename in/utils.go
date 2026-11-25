@@ -8,7 +8,7 @@ import (
 )
 
 func IOGetString(msg string, r io.Reader, w io.Writer) (string, error){
-	_, err := fmt.Println(msg)
+	_, err := fmt.Fprint(w, msg)
 	if err != nil {
 		return "", err
 	}
@@ -24,21 +24,21 @@ func IOGetString(msg string, r io.Reader, w io.Writer) (string, error){
 }
 
 func IOGetInt(msg string, r io.Reader, w io.Writer) (int, error) {
-	for {
-		s, err := IOGetString(msg, r, w)
-		if err != nil {
-			return 0, err
-		}
-		n, err := strconv.Atoi(s)
-		if errors.Is(err, strconv.ErrRange) {
-			fmt.Println("Index out of range, type a lower id number")
-			continue
-		}
-		if errors.Is(err, strconv.ErrSyntax) {
-			fmt.Println("This string can't be parsed into a integer")
-			continue
-		}
-		return n, err
+	s, err := IOGetString(msg, r, w)
+	if err != nil {
+		return 999, err
 	}
+	n, err := strconv.Atoi(s)
+	if errors.Is(err, strconv.ErrRange) {
+		fmt.Fprint(w, "Number out of range, type a lower number")
+		return 9999, err
+	}
+	if errors.Is(err, strconv.ErrSyntax) {
+		fmt.Fprint(w, "This string can't be parsed into a integer")
+		return 99999, err
+	}
+	
+	return n, err
 }
+
 
