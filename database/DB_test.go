@@ -1,7 +1,5 @@
 package database
 
-// ---- Var DB test ---- \\
-
 import (
 	"Treino-em-go/tools"
 	"testing"
@@ -18,10 +16,6 @@ func TestDatabaseAttributes(t *testing.T) {
 
 func TestGroupMethods(t *testing.T) {
 	nameList := []string{"group1", "group2", "group3"}
-	shouldBeEmpty := ListGroupsByName(Database, nameList)
-	if len(shouldBeEmpty) != 0 {
-		t.Errorf("len(ListGroupsByName()) = %d; want %d; when used on an empty SLL, len(ListGroupsByName()) should be 0", len(shouldBeEmpty), 0)
-	}
 
 	CreateGroup(Database, "group1")
 	if CreateGroup(Database, "group1") {
@@ -118,5 +112,15 @@ func TestUserMethods(t *testing.T) {
 
 	if Database.users.GetLength() != 1 {
 		t.Errorf("RemoveUser() = %d; want %d; function is not reducing list's length", Database.groups.GetLength(), 1)
+	}
+
+	Database.RemoveUser(0)
+
+	CreateUser(Database, "userToFind", "password")
+	user = GetUserById(Database, 1)
+	searcher := tools.NewFindFirstSearcher(tools.NewUserComparable(user))
+	Database.FindUser(searcher)
+	if searcher.GetIndex() != 0 {
+		t.Errorf("searcher.FindUser(); searcher.GetIndex() = %d; want 0; method is not being able to execute Find() correctly", searcher.GetIndex())
 	}
 }

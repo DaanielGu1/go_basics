@@ -112,7 +112,8 @@ func (sll *SLL[T]) Get(index int) T {
 
 		if index < 0 {
 			panic(errors.New("Index out of range"))
-		} else if index > sll.GetLength() - 1 {
+		} 
+	} else { if index > sll.GetLength() - 1 {
 			panic(errors.New("Index out of range"))
 		}
 	}

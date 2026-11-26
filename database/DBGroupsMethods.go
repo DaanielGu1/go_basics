@@ -24,18 +24,18 @@ func GroupsExists(db *DB, names []string) bool {
 }
 
 func ListGroupsByName(db *DB, names []string) []models.Group {
-	grouplist := make([]models.Group, len(names))
+	groupList := make([]models.Group, len(names))
 	
-	for i := range db.users.GetLength() {
-		current := db.groups.Get(i)
-
+	for groupIndex := range db.groups.GetLength() {
+		current := db.groups.Get(groupIndex)
+		
 		for _, name := range names {
 			if current.Name == name {
-				grouplist = append(grouplist, *current)
+				groupList = append(groupList, *current)
 			}
 		}
 	}
-	return grouplist
+	return groupList
 }
 
 func GetGroupByName(db *DB, name string) *models.Group {

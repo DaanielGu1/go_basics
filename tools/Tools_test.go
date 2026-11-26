@@ -345,3 +345,119 @@ func TestEquals(t *testing.T) {
 		t.Errorf("equals(): the comparable didn't verify the same thing of the parameter.")
 	}
 }
+
+func TestRemovePanics(t *testing.T) {
+	t.Run("Empty list", func(t *testing.T) {
+		l := NewList[int]()
+		
+		defer func() {
+			if recover() == nil {
+				t.Error("Remove(): Expected panic removing an item in an empty list.")
+			}
+		}()
+		
+		l.Remove(0)
+	})
+	t.Run("Negative index out of range.", func(t *testing.T) {
+		l := NewList[int]()
+		l.Add(1)
+		
+		defer func() {
+			if recover() == nil {
+				t.Error("Remove(): Expected panic removing a negative index out of range.")
+			}
+		}()
+		
+		l.Remove(-5)
+	})
+
+	t.Run("Index out of list's length.", func(t *testing.T) {
+		l := NewList[int]()
+		l.Add(1)
+		l.Add(2)
+		l.Add(3)
+
+		defer func() {
+			if recover() == nil {
+				t.Error("Remove(): Expected panic removing a positive index out of range.")
+			}
+		}()
+
+		l.Remove(4)
+	})
+
+	t.Run("Index out of list's length.", func(t *testing.T) {
+		l := NewList[int]()
+		l.Add(1)
+		l.Add(2)
+		l.Add(3)
+
+		l.SetLength(4)
+
+		defer func() {
+			r := recover()
+			
+			if r == nil {
+				t.Error("Remove(): Expected panic setting a length out of range.")
+			}
+
+			_, ok := r.(error) 
+			if !ok {
+			t.Errorf("Remove() = %v; want index out of range set", r)
+		}
+		}()
+
+		l.Remove(3)
+	})
+}
+
+func TestGetPanics(t *testing.T) {
+	t.Run("Empty List", func(t *testing.T) {
+		l := NewList[int]()
+
+		defer func() {
+			r := recover()
+
+			if r == nil {
+				t.Errorf("Get(): Expected panic using Get() in an empty list.")
+			}
+		}()
+
+		l.Get(5)
+	})
+	t.Run("Negative index out of range", func(t *testing.T) {
+		l := NewList[int]()
+
+		l.Add(1)
+		l.Add(2)
+		l.Add(3)
+
+		defer func() {
+			r := recover()
+
+			if r == nil {
+				t.Errorf("Get(): Expected panic using a negative index out of range.")
+			}
+		}()
+
+		l.Get(-5)
+	})
+
+	t.Run("Positive index out of range", func(t *testing.T) {
+		l := NewList[int]()
+
+		l.Add(1)
+		l.Add(2)
+		l.Add(3)
+
+		defer func() {
+			r := recover()
+
+			if r == nil {
+				t.Errorf("Get(): Expected panic using a positive index out of range.")
+			}
+		}()
+
+		l.Get(5)
+	})
+}
